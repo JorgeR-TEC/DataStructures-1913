@@ -15,7 +15,7 @@ int main(){
 	cout<<"a: "<<a<<endl;
 	cout<<"b: "<<b<<endl;
 	cout<<"c: "<<c<<endl;
-	f(a,b,&c);
+	f((int)&a,b,&c);
 	cout<<"variables despues de función"<<endl;
 	cout<<"a: "<<a<<endl;
 	cout<<"b: "<<b<<endl;
