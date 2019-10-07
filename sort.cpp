@@ -5,7 +5,7 @@ using namespace std;
 template <class T>
 class Ordenar{
 	public:
-		virtual void sort(T* arreglo, int size);
+		virtual void sort(T* arreglo, int size)=0;
 		void intercambiar(T* arreglo, int a, int b){
 			T temp=arreglo[a];
 			arreglo[a]=arreglo[b];
