@@ -20,7 +20,7 @@ class Ordenar{
 };
 
 template <class T>
-class Selectionsort : public Ordenar<T>{
+class SelectionSort : public Ordenar<T>{
 	public:
 	void sort(T* arreglo, int size){
 		
@@ -36,7 +36,7 @@ class Selectionsort : public Ordenar<T>{
 	}
 };
 template <class T>
-class Bubblesort : public Ordenar<T>{
+class BubbleSort : public Ordenar<T>{
 	public:
 	void sort(T* arreglo, int size){
 		for(int i=0; i<size;i++){
@@ -50,7 +50,7 @@ class Bubblesort : public Ordenar<T>{
 };
 
 template <class T>
-class Insertionsort : public Ordenar<T>{
+class InsertionSort : public Ordenar<T>{
 	public:
 	void sort(T* arreglo, int size){
 		for(int i=1; i<size;i++){
@@ -65,10 +65,100 @@ class Insertionsort : public Ordenar<T>{
 	}
 };
 
+template <class T>
+class MergeSort: public Ordenar<T>{
+	public:
+	void sort(T *arreglo, int size){
+		sortAux(arreglo, 0, size-1);
+	}
+	private:
+	void sortAux(T *arreglo, int lo, int hi){
+		if(lo<hi){
+			int mid=lo+(hi-lo)/2;
+			sortAux(arreglo, lo, mid);
+			sortAux(arreglo, mid+1, hi);
+			merge(arreglo, lo, mid, hi);
+		}
+	}
+	
+	void merge(T *arreglo, int lo, int mid, int hi){
+		int lSize=mid-lo+1;
+		int rSize=hi-mid;
+		T *left=(T *)malloc(sizeof(T)*lSize);
+		T *right=(T *)malloc(sizeof(T)*rSize);
+		for(int i=0; i<lSize; i++){
+			left[i]=arreglo[lo+i];
+		}
+		for(int i=0; i<rSize; i++){
+			right[i]=arreglo[mid+1+i];
+		}
+		int l=0;
+		int r=0;
+		int pos=lo;
+		while(l<lSize && r<rSize){
+			if(left[l]<=right[r]){
+				arreglo[pos]=left[l];
+				l++;
+			}else{
+				arreglo[pos]=right[r];
+				r++;
+			}
+			pos++;
+		}
+		while(l<lSize){
+			arreglo[pos]=left[l];
+			l++;
+			pos++;
+		}
+		while(r<rSize){
+			arreglo[pos]=right[r];
+			r++;
+			pos++;
+		}
+	}
+};
+
+template <class T>
+class QuickSort: public Ordenar<T>{
+	public:
+	void sort(T *arreglo, int size){
+		sortAux(arreglo, 0, size-1);
+	}
+	private:
+	void sortAux(T *arreglo, int lo, int hi){
+		if(lo<hi){
+			int j=partition(arreglo, lo, hi);
+			sortAux(arreglo, lo, j-1);
+			sortAux(arreglo, j+1, hi);
+		}
+	}
+	
+	int partition(T * arreglo, int lo, int hi){
+		T pivote=arreglo[lo];
+		int i=lo+1;
+		int j=hi;
+		while(true){
+			while(arreglo[i]<pivote){
+				i++;
+			}
+			while(arreglo[j]>pivote){
+				j--;
+			}
+			if(i>=j){
+				break;
+			}else{
+				this->intercambiar(arreglo, i,j);
+			}
+		}
+		this->intercambiar(arreglo, lo, j);
+		return j;
+	}
+};
+
 
 int main(){
 	srand(time(0));//srand es seed rand, que nos indica la semilla (numero inicial) del generador de numeros aleatorios. Le estoy diciendo time(0) para que tome el tiempo actual del sistema como semilla y asi garantizar que cada ejecucion genere numeros aleatorios diferentes
-	Insertionsort<int> s;
+	QuickSort<int> s;
 	int size=5;
 	int arreglo[size];
 	for(int i=0; i<size;i++){
