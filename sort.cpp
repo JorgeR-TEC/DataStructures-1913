@@ -138,7 +138,7 @@ class QuickSort: public Ordenar<T>{
 		int i=lo+1;
 		int j=hi;
 		while(true){
-			while(arreglo[i]<pivote){
+			while(arreglo[i]<=pivote){
 				i++;
 			}
 			while(arreglo[j]>pivote){
@@ -159,10 +159,10 @@ class QuickSort: public Ordenar<T>{
 int main(){
 	srand(time(0));//srand es seed rand, que nos indica la semilla (numero inicial) del generador de numeros aleatorios. Le estoy diciendo time(0) para que tome el tiempo actual del sistema como semilla y asi garantizar que cada ejecucion genere numeros aleatorios diferentes
 	QuickSort<int> s;
-	int size=5;
+	int size=20;
 	int arreglo[size];
 	for(int i=0; i<size;i++){
-		arreglo[i]=rand()%100;
+		arreglo[i]=rand()%10;
 	}
 	s.imprimirArreglo(arreglo, size);
 	s.sort(arreglo,size);
