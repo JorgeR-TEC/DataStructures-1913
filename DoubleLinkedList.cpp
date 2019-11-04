@@ -1,32 +1,30 @@
 #include <iostream>
-
-
 using namespace std;
-
 template <class T>
 class Nodo{
 	public:
-	T value;
-	Nodo *next;
-	
-	Nodo(){
-		value=NULL;
-		next=NULL;
-	}
-	
-	Nodo(T val){
-		value=val;
-		next=NULL;
-	}
+		T value;
+		Nodo* next;
+		Nodo* before;
+		
+		Nodo(){
+			value=NULL;
+			next=NULL;
+			before=NULL;
+		}
+		
+		Nodo(T val){
+			value=val;
+			next=NULL;
+			before=NULL;
+		}
 };
 
 template <class T>
-class LinkedList{
-	Nodo<T> *head;
+class doubleLinkedList{
 	public: 
-		LinkedList(){
-			head=NULL;
-		}
+		Nodo<T> *head=NULL;
+		
 		void append(Nodo<T>* nuevo){
 			if(head==NULL){
 				head=nuevo;
@@ -36,12 +34,18 @@ class LinkedList{
 					temp=temp->next;
 				}
 				temp->next=nuevo;
+				nuevo->before=temp;
 			}
 		}
 		
 		void append(T value){
 			Nodo<T> *nuevo=new Nodo<T>(value);
 			append(nuevo);
+		}
+		
+		void insertar(int pos, T value){
+			Nodo<T> *nuevo=new Nodo<T>(value);
+			insertar(pos, nuevo);
 		}
 		
 		void insertar(int pos, Nodo<T> *nuevo){
@@ -52,6 +56,7 @@ class LinkedList{
 			Nodo<T> *temp=head;
 			if(pos==0){
 				nuevo->next=head;
+				head->before=nuevo;
 				head=nuevo;
 				return;
 			}
@@ -63,33 +68,9 @@ class LinkedList{
 				return;
 			}
 			nuevo->next=temp->next;
+			temp->next->before=nuevo;
+			nuevo->before=temp;
 			temp->next=nuevo;
-		}
-		
-		void insertar(int pos, T value){
-			Nodo<T> *nuevo=new Nodo<T>(value);
-			insertar(pos, nuevo);
-		}
-		
-		void remove(T value){
-			//checamos si es el primer elemento
-			if(head->value==value){
-				head=head->next;
-				return;
-			}else{
-				Nodo<T> *temp=head;
-				while(temp!=NULL){
-					if (temp->next==NULL){
-						return;//Si el siguiente es NULL y no lo encontramos, paramos.
-					}else if(temp->next->value==value){
-						break;//si el siguiente elemento es el buscado, paramos.
-					}else{
-						temp=temp->next;//no es, avanzamos
-					}
-				}
-				temp->next=temp->next->next;
-			}
-			
 		}
 		
 		void printList(){
@@ -102,17 +83,38 @@ class LinkedList{
 		}
 		
 		
-		
+		void remove(T value){
+			Nodo<T> *temp=head;
+			while(temp!=NULL){
+				if(temp->value==value){
+					if(temp->next!=NULL){
+						temp->next->before=temp->before;
+					}
+					if(temp->before!=NULL){
+						temp->before->next=temp->next;
+					}
+					if(temp==head){
+						head=temp->next;
+					}
+					return;
+				}else{
+					temp=temp->next;
+				}
+			}
+			
+		}
 };
 
+
+
 int main(){
-	LinkedList<int> l;
+	doubleLinkedList<int> l;
 	l.append(5);
 	l.append(4);
 	l.append(1);
 	l.printList();
 	l.insertar(2,10);
 	l.printList();
-	l.remove(11);
+	l.remove(5);
 	l.printList();
 }
